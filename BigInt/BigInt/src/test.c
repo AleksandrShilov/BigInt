@@ -1,34 +1,34 @@
 #include <check.h>
-#include "s21_decimal.h"
+#include "my_decimal.h"
 #include "secondary_functions.h"
 
 typedef struct {
-    s21_decimal op1;
+    my_decimal op1;
     int op2;
     int result_code;
 } test_struct_di;
 
 typedef struct {
-    s21_decimal op1;
+    my_decimal op1;
     float op2;
     int result_code;
 } test_struct_df;
 
 typedef struct {
-    s21_decimal op;
-    s21_decimal wait;
+    my_decimal op;
+    my_decimal wait;
 } test_struct_dd;
 
 typedef struct {
-    s21_decimal op1;
-    s21_decimal op2;
-    s21_decimal wait;
+    my_decimal op1;
+    my_decimal op2;
+    my_decimal wait;
     int result_code;
 } test_struct_ddd;
 
 typedef struct {
-    s21_decimal op1;
-    s21_decimal op2;
+    my_decimal op1;
+    my_decimal op2;
     int result_less;
     int result_less_or_equal;
     int result_greater;
@@ -81,26 +81,26 @@ test_struct_ddd test_pack_add[] = {
      OK},
 
 // блок с проверкой на бесконечность
-// TEST 8 (max_dec) + (1) = s21_INF    Степени 0 и 0
+// TEST 8 (max_dec) + (1) = my_INF    Степени 0 и 0
     {{-1, -1, -1, 0},
      {1, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 9 (-min_dec) + (-1) = s21_N_INF    Степени 0 и 0
+     my_INF},
+// TEST 9 (-min_dec) + (-1) = my_N_INF    Степени 0 и 0
     {{-1, -1, -1, -2147483648},
      {1, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 10  (+) + (+) = s21_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 10  (+) + (+) = my_INF    Степени 0 и 0
     {{-1, -1, 0, 0},
      {1, 0, -1, 0},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 11 (-) + (-) = s21_N_INF    Степени 0 и 0
+     my_INF},
+// TEST 11 (-) + (-) = my_N_INF    Степени 0 и 0
     {{-1, -1, 0, -2147483648},
      {1, 0, -1, -2147483648},
      {0, 0, 0, 0},
-     s21_N_INF},
+     my_N_INF},
 // TEST 12 (79228162514264337593543950.335) + (400.34623) =     Степени 3 и 5
     {{-1, -1, -1, 196608},
      {40034623, 0, 0, 327680},
@@ -234,11 +234,11 @@ test_struct_ddd test_pack_add[] = {
      {15678, 0, 0, 262144},
      {-2, -1, -1, 0},
      OK},
-// TEST 38 (79228162514264337593543950334) + (1.5678) =  s21_INF
+// TEST 38 (79228162514264337593543950334) + (1.5678) =  my_INF
     {{-2, -1, -1, 0},
      {15678, 0, 0, 262144},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 39 (79228162514264337593543950332) + (1.5678) =  79228162514264337593543950334
     {{-4, -1, -1, 0},
      {15678, 0, 0, 262144},
@@ -255,11 +255,11 @@ test_struct_ddd test_pack_add[] = {
      {15678, 0, 0, -2147221504},
      {-2, -1, -1, -2147483648},
      OK},
-// TEST 42 (-79228162514264337593543950334) + (-1.5678) =  s21_N_INF
+// TEST 42 (-79228162514264337593543950334) + (-1.5678) =  my_N_INF
     {{-2, -1, -1, -2147483648},
      {15678, 0, 0, -2147221504},
      {0, 0, 0, 0},
-     s21_N_INF},
+     my_N_INF},
 // TEST 43 (-79228162514264337593543950332) + (-1.5678) =  -79228162514264337593543950334
     {{-4, -1, -1, -2147483648},
      {15678, 0, 0, -2147221504},
@@ -335,23 +335,23 @@ test_struct_ddd test_pack_add[] = {
      {1, 0, 0, -2145648640},
      {100000001, 0, 0, -2145648640},
      OK},
-// TEST 58 (mac_dec) + (mac_dec) =  s21_INF
+// TEST 58 (mac_dec) + (mac_dec) =  my_INF
     {{-1, -1, -1, 0},
      {-1, -1, -1, 0},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 59 (min_dec) + (min_dec) =  10000001
     {{-1, -1, -1, -2147483648},
      {-1, -1, -1, -2147483648},
      {0, 0, 0, 0},
-     s21_N_INF}
+     my_N_INF}
 };
 
 START_TEST(test_add) {
-    s21_decimal result;
-    int result_code = s21_add(test_pack_add[_i].op1, test_pack_add[_i].op2, &result);
+    my_decimal result;
+    int result_code = my_add(test_pack_add[_i].op1, test_pack_add[_i].op2, &result);
     ck_assert_int_eq(result_code, test_pack_add[_i].result_code);
-    ck_assert_mem_eq(&result, &test_pack_add[_i].wait, sizeof(s21_decimal));
+    ck_assert_mem_eq(&result, &test_pack_add[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
@@ -399,42 +399,42 @@ test_struct_ddd test_pack_sub[] = {
      OK},
 
 // блок с проверкой на бесконечность
-// TEST 8 (max_dec) - (1) = s21_INF    Степени 0 и 0
+// TEST 8 (max_dec) - (1) = my_INF    Степени 0 и 0
     {{-1, -1, -1, 0},
      {1, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 9 (-min_dec) - (1) = s21_N_INF    Степени 0 и 0
+     my_INF},
+// TEST 9 (-min_dec) - (1) = my_N_INF    Степени 0 и 0
     {{-1, -1, -1, -2147483648},
      {1, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 10  (+) - (-) = s21_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 10  (+) - (-) = my_INF    Степени 0 и 0
     {{-1, -1, 0, 0},
      {1, 0, -1, -2147483648},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 11 (+) - (-) = s21_N_INF    Степени 0 и 0
+     my_INF},
+// TEST 11 (+) - (-) = my_N_INF    Степени 0 и 0
     {{-1, -1, 0, 0},
      {1, 0, -1, -2147483648},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 12 (79228162514264337593543950.335) - (-400.34623) = s21_INF    Степени 3 и 5
+     my_INF},
+// TEST 12 (79228162514264337593543950.335) - (-400.34623) = my_INF    Степени 3 и 5
     {{-1, -1, -1, 196608},
      {40034623, 0, 0, -2147155968},
      {2577020412, 2576980377, 429496729, 131072},
      OK},
-// TEST 13 (-79228162514264337593543950.335) - (400.34623) = s21_N_INF    Степени 3 и 5
+// TEST 13 (-79228162514264337593543950.335) - (400.34623) = my_N_INF    Степени 3 и 5
     {{-1, -1, -1, -2147352576},
      {40034623, 0, 0, 327680},
      {2576984381, 2576980377, 429496729, -2147418112},
      OK},
-// TEST 14 (+) - (-) = s21_INF переполнение вещественных положительных. Степени 10 и 18
+// TEST 14 (+) - (-) = my_INF переполнение вещественных положительных. Степени 10 и 18
     {{-1, -1, 0, 655360},
      {0, -1, -1, -2146304000},
      {2137483648, 2576980377, 439496729, 1114112},
      OK},
-// TEST 15 (-) - (+) = s21_INF переполнение вещественных положительных. Степени 10 и 18
+// TEST 15 (-) - (+) = my_INF переполнение вещественных положительных. Степени 10 и 18
     {{-1, -1, 0, -2146828288},
      {0, -1, -1, 1179648},
      {2137483648, 2576980377, 439496729, -2146369536},
@@ -552,11 +552,11 @@ test_struct_ddd test_pack_sub[] = {
      {15678, 0, 0, -2147221504},
      {-2, -1, -1, 0},
      OK},
-// TEST 38 (79228162514264337593543950334) - (-1.5678) =  s21_INF
+// TEST 38 (79228162514264337593543950334) - (-1.5678) =  my_INF
     {{-2, -1, -1, 0},
      {15678, 0, 0, -2147221504},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 39 (79228162514264337593543950332) - (-1.5678) =  79228162514264337593543950334
     {{-4, -1, -1, 0},
      {15678, 0, 0, -2147221504},
@@ -573,11 +573,11 @@ test_struct_ddd test_pack_sub[] = {
      {15678, 0, 0, 262144},
      {-2, -1, -1, -2147483648},
      OK},
-// TEST 42 (-79228162514264337593543950334) - (1.5678) =  s21_N_INF
+// TEST 42 (-79228162514264337593543950334) - (1.5678) =  my_N_INF
     {{-2, -1, -1, -2147483648},
      {15678, 0, 0, 262144},
      {0, 0, 0, 0},
-     s21_N_INF},
+     my_N_INF},
 // TEST 43 (-79228162514264337593543950332) - (1.5678) =  -79228162514264337593543950334
     {{-4, -1, -1, -2147483648},
      {15678, 0, 0, 262144},
@@ -679,27 +679,27 @@ test_struct_ddd test_pack_sub[] = {
      {1, 0, 0, -2145648640},
      {99999999, 0, 0, -2145648640},
      OK},
-// TEST 63 (min_dec) - (max_dec) =  s21_N_INF
+// TEST 63 (min_dec) - (max_dec) =  my_N_INF
     {{-1, -1, -1, -2147483648},
      {-1, -1, -1, 0},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 64 (max_dec) - (min_dec) =  s21_INF
+     my_N_INF},
+// TEST 64 (max_dec) - (min_dec) =  my_INF
     {{-1, -1, -1, 0},
      {-1, -1, -1, -2147483648},
      {0, 0, 0, 0},
-     s21_INF}
+     my_INF}
 };
 
 START_TEST(test_sub) {
-    s21_decimal result;
-    int result_code = s21_sub(test_pack_sub[_i].op1, test_pack_sub[_i].op2, &result);
+    my_decimal result;
+    int result_code = my_sub(test_pack_sub[_i].op1, test_pack_sub[_i].op2, &result);
     ck_assert_int_eq(result_code, test_pack_sub[_i].result_code);
-    ck_assert_mem_eq(&result, &test_pack_sub[_i].wait, sizeof(s21_decimal));
+    ck_assert_mem_eq(&result, &test_pack_sub[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
-// s21_mul
+// my_mul
 
 test_struct_ddd test_pack_mul[] = {
 // БЛОК С НУЛЯМИ
@@ -745,66 +745,66 @@ test_struct_ddd test_pack_mul[] = {
      OK},
 
 // БЛЛОК УМНОЖЕНИЯ INF|N_INF
-// TEST 8 (max_dec) * (4) = s21_INF     Степени 0 и 0
+// TEST 8 (max_dec) * (4) = my_INF     Степени 0 и 0
     {{-1, -1, -1, 0},
      {4, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 9 (-max_dec) * (4) = s21_N_INF     Степени 0 и 0
+     my_INF},
+// TEST 9 (-max_dec) * (4) = my_N_INF     Степени 0 и 0
     {{-1, -1, -1, -2147483648},
      {4, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 10 (max_dec) * (-4) = s21_N_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 10 (max_dec) * (-4) = my_N_INF    Степени 0 и 0
     {{-1, -1, -1, 0},
      {4, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 11 (-max_dec) * (4) = s21_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 11 (-max_dec) * (4) = my_INF    Степени 0 и 0
     {{-1, -1, -1, -2147483648},
      {4, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 12 (64 бита = 1) * (8589934592) = s21_INF    Степени 0 и 0
+     my_INF},
+// TEST 12 (64 бита = 1) * (8589934592) = my_INF    Степени 0 и 0
     {{-1, -1, 0, 0},
      {0, 2, 0, 0},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 13 (-64 бита = 1) * (8589934592) = s21_N_INF    Степени 0 и 0
+     my_INF},
+// TEST 13 (-64 бита = 1) * (8589934592) = my_N_INF    Степени 0 и 0
     {{-1, -1, 0, -2147483648},
      {0, 2, 0, 0},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 14 (64 бита = 1) * (-8589934592) = s21_N_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 14 (64 бита = 1) * (-8589934592) = my_N_INF    Степени 0 и 0
     {{-1, -1, 0, 0},
      {0, 2, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 15 (-64 бита = 1) * (-8589934592) = s21_INF    Степени 0 и 0
+     my_N_INF},
+// TEST 15 (-64 бита = 1) * (-8589934592) = my_INF    Степени 0 и 0
     {{-1, -1, 0, -2147483648},
      {0, 2, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 16 (64 бита = 1) * (8589934592) = s21_INF    Степени 3 и 16
+     my_INF},
+// TEST 16 (64 бита = 1) * (8589934592) = my_INF    Степени 3 и 16
     {{-1, -1, 0, 196608},
      {0, 0, -1, 1048576},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 17 (-64 бита = 1) * (8589934592) = s21_N_INF    Степени 3 и 16
+     my_INF},
+// TEST 17 (-64 бита = 1) * (8589934592) = my_N_INF    Степени 3 и 16
     {{-1, -1, 0, -2147287040},
      {0, 0, -1, 1048576},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 18 (64 бита = 1) * (-8589934592) = s21_N_INF    Степени 3 и 16
+     my_N_INF},
+// TEST 18 (64 бита = 1) * (-8589934592) = my_N_INF    Степени 3 и 16
     {{-1, -1, 0, 196608},
      {0, 0, -1, -2146435072},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 19 (-64 бита = 1) * (-8589934592) = s21_N_INF    Степени 3 и 16
+     my_N_INF},
+// TEST 19 (-64 бита = 1) * (-8589934592) = my_N_INF    Степени 3 и 16
     {{-1, -1, 0, -2147287040},
      {0, 0, -1, -2146435072},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 
 // БЛОК УМНОЖЕНИЯ ЦЕЛЫХ ЧИСЕЛ
 // TEST 20 253 * 54937 = 13899061    Степени 0 и 0
@@ -893,7 +893,7 @@ test_struct_ddd test_pack_mul[] = {
     {{10, 0, 10, 65536},
      {37958405, -1761494143, 475176167, 327680},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 37
     {{1, 0, 0, 0},
      {1, 0, 0, 0},
@@ -919,12 +919,12 @@ test_struct_ddd test_pack_mul[] = {
     {{-1, -1, -1, 0},
      {-1, -1, -1, 0},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 42 (min_dec) * что то там в 28 степень = s21_N_INF переполнение
+     my_INF},
+// TEST 42 (min_dec) * что то там в 28 степень = my_N_INF переполнение
     {{-1, -1, -1, -2147483648},
      {0, 0, -1, 1835008},
      {0, 0, 0, 0},
-     s21_N_INF},
+     my_N_INF},
 // TEST 43 (max_dec в 28) * (max_dec в 28) = дохуя в 27
     {{-1, -1, -1, 1835008},
      {-1, -1, -1, 1835008},
@@ -933,55 +933,55 @@ test_struct_ddd test_pack_mul[] = {
 };
 
 START_TEST(test_mul) {
-    s21_decimal result;
-    int result_code = s21_mul(test_pack_mul[_i].op1, test_pack_mul[_i].op2, &result);
+    my_decimal result;
+    int result_code = my_mul(test_pack_mul[_i].op1, test_pack_mul[_i].op2, &result);
     ck_assert_int_eq(result_code, test_pack_mul[_i].result_code);
-    ck_assert_mem_eq(&result, &test_pack_mul[_i].wait, sizeof(s21_decimal));
+    ck_assert_mem_eq(&result, &test_pack_mul[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
 test_struct_ddd test_pack_div[] = {
 // БЛОК С НУЛЯМИ
-// TEST 0   0 * 0 = s21_NAN
+// TEST 0   0 * 0 = my_NAN
     {{0, 0, 0, 0},
      {0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 1   -0 * -0 = 0
     {{0, 0, 0, -2147483648},
      {0, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 2   0 * -0 = 0
     {{0, 0, 0, 0},
      {0, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 3   -0 * 0 = 0
     {{0, 0, 0, -2147483648},
      {0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 4 0.00 * 0.0000    Степени 2 и 4
     {{0, 0, 0, 131072},
      {0, 0, 0, 262144},
      {0, 0, 0, 393216},
-     s21_NAN},
+     my_NAN},
 // TEST 5 -0.00 * (-0.0000)    Степени 2 и 4
     {{0, 0, 0, -2147352576},
      {0, 0, 0, -2147221504},
      {0, 0, 0, 393216},
-     s21_NAN},
+     my_NAN},
 // TEST 6 -0.00 * 0.0000    Степени 2 и 4
     {{0, 0, 0, -2147352576},
      {0, 0, 0, 262144},
      {0, 0, 0, 393216},
-     s21_NAN},
+     my_NAN},
 // TEST 7 0.00 * (-0.0000)    Степени 2 и 4
     {{0, 0, 0, 131072},
      {0, 0, 0, -2147221504},
      {0, 0, 0, 393216},
-     s21_NAN},
+     my_NAN},
 
 // БЛОК ДЕЛЕНИЯ ЦЕЛЫХ ЧИСЕЛ
 // TEST 8 13899061 / 54937 = 253    Степени 0 и 0
@@ -1051,12 +1051,12 @@ test_struct_ddd test_pack_div[] = {
     {{-1, -1, -1, 0},
      {1, 0, 0, 65536},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 21
     {{-1, -1, -1, 0},
      {0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 22 (981,400026679) / (4.57) = 214.7483647    Степени 7 и 2
     {{2147483191, 228, 0, 589824},
      {457, 0, 0, 131072},
@@ -1077,31 +1077,31 @@ test_struct_ddd test_pack_div[] = {
      {457, 0, 0, -2147352576},
      {2147483647, 0, 0, 458752},
      OK},
-// TEST 26 (max_dec) / 1 в 1ой = s21_INF
+// TEST 26 (max_dec) / 1 в 1ой = my_INF
     {{-1, -1, -1, 0},
      {1, 0, 0, 65536},
      {0, 0, 0, 0},
-     s21_INF},
-// TEST 27 (max_dec) / 1 в 28ой = s21_INF
+     my_INF},
+// TEST 27 (max_dec) / 1 в 28ой = my_INF
     {{-1, -1, -1, 0},
      {1, 0, 0, 1835008},
      {0, 0, 0, 0},
-     s21_INF},
+     my_INF},
 // TEST 28 (max_dec в 28) / 1 в 28ой = max_dec
     {{-1, -1, -1, 1835008},
      {1, 0, 0, 1835008},
      {-1, -1, -1, 0},
      OK},
-// TEST 29 (max_dec) / -1 в 1ой = s21_N_INF
+// TEST 29 (max_dec) / -1 в 1ой = my_N_INF
     {{-1, -1, -1, 0},
      {1, 0, 0, -2147418112},
      {0, 0, 0, 0},
-     s21_N_INF},
-// TEST 30 (min_dec) / 1 в 28ой = s21_N_INF
+     my_N_INF},
+// TEST 30 (min_dec) / 1 в 28ой = my_N_INF
     {{-1, -1, -1, -2147483648},
      {1, 0, 0, 1835008},
      {0, 0, 0, 0},
-     s21_N_INF},
+     my_N_INF},
 // TEST 31 (max_dec в 28) / 1 в 28ой = max_dec
     {{-1, -1, -1, 1835008},
      {1, 0, 0, -2145648640},
@@ -1176,23 +1176,23 @@ test_struct_ddd test_pack_div[] = {
     {{1, 0, 0, 0},
      {0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 // TEST 46
     {{0, 0, 0, 0},
      {0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_NAN},
+     my_NAN},
 };
 
 START_TEST(test_div) {
-    s21_decimal result;
-    int result_code = s21_div(test_pack_div[_i].op1, test_pack_div[_i].op2, &result);
+    my_decimal result;
+    int result_code = my_div(test_pack_div[_i].op1, test_pack_div[_i].op2, &result);
     ck_assert_int_eq(result_code, test_pack_div[_i].result_code);
-    ck_assert_mem_eq(&result, &test_pack_div[_i].wait, sizeof(s21_decimal));
+    ck_assert_mem_eq(&result, &test_pack_div[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
-// s21_mod
+// my_mod
 
 test_struct_ddd test_pack_mod[] = {
     // Целые числа
@@ -1341,9 +1341,9 @@ test_struct_ddd test_pack_mod[] = {
 };
 
 START_TEST(test_mod) {
-    s21_decimal result;
-    s21_mod(test_pack_mod[_i].op1, test_pack_mod[_i].op2, &result);
-    ck_assert_mem_eq(&result, &test_pack_mod[_i].wait, sizeof(s21_decimal));
+    my_decimal result;
+    my_mod(test_pack_mod[_i].op1, test_pack_mod[_i].op2, &result);
+    ck_assert_mem_eq(&result, &test_pack_mod[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
@@ -1352,196 +1352,196 @@ test_struct_ddi test_pack_comparison[] = {
 // TEST 0   0 <, <=, >, >=, ==, != 0
     {{0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 1   -0 <, <=, >, >=, ==, != 0
     {{0, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 2   0 <, <=, >, >=, ==, != -0
     {{0, 0, 0, 0},
      {0, 0, 0, -2147483648},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 3   -0 <, <=, >, >=, ==, != -0
     {{0, 0, 0, -2147483648},
      {0, 0, 0, -2147483648},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 4   0.00 <, <=, >, >=, ==, != 0.0000
     {{0, 0, 0, 0},
      {0, 0, 0, 0},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 5   -0.00 <, <=, >, >=, ==, != 0.0000
     {{0, 0, 0, -2147483648},
      {0, 0, 0, 0},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 6   0.00 <, <=, >, >=, ==, != -0.0000
     {{0, 0, 0, 0},
      {0, 0, 0, -2147483648},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 7   -0.00 <, <=, >, >=, ==, != -0.0000
     {{0, 0, 0, -2147483648},
      {0, 0, 0, -2147483648},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 
 // БЛОК ЦЕЛЫХ ЧИСЕЛ ПОЛОЖИТЕЛЬНЫХ И ОТРИЦАТЕЛЬНЫХ   СТЕПЕНЬ 0 И 0
 // TEST 8   3 <, <=, >, >=, ==, != 3
     {{3, 0, 0, 0},
      {3, 0, 0, 0},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 9   -3 <, <=, >, >=, ==, != -3
     {{3, 0, 0, -2147483648},
      {3, 0, 0, -2147483648},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 10   3 <, <=, >, >=, ==, != -3
     {{3, 0, 0, 0},
      {3, 0, 0, -2147483648},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 11   -3 <, <=, >, >=, ==, != 3
     {{3, 0, 0, -2147483648},
      {3, 0, 0, 0},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 12   (64 бита 1) <, <=, >, >=, ==, != 67108863
     {{-1, -1, 0, 0},
      {67108863, 0, 0, 0},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 13   -(64 бита 1) <, <=, >, >=, ==, != -67108863
     {{-1, -1, 0, -2147483648},
      {67108863, 0, 0, -2147483648},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 14   (64 бита 1) <, <=, >, >=, ==, != -67108863
     {{-1, -1, 0, 0},
      {67108863, 0, 0, -2147483648},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 15   -(64 бита 1) <, <=, >, >=, ==, != 67108863
     {{-1, -1, 0, -2147483648},
      {67108863, 0, 0, 0},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 16   4294967294 <, <=, >, >=, ==, != (74 бита 1)
     {{-2, 0, 0, 0},
      {-1, -1, 2147483647, 0},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 17   -4294967294 <, <=, >, >=, ==, != -(74 бита 1)
     {{-2, 0, 0, -2147483648},
      {-1, -1, 2147483647, -2147483648},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 18   4294967294 <, <=, >, >=, ==, != -(74 бита 1)
     {{-2, 0, 0, 0},
      {-1, -1, 2147483647, -2147483648},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 19   -4294967294 <, <=, >, >=, ==, != (74 бита 1)
     {{-2, 0, 0, -2147483648},
      {-1, -1, 2147483647, 0},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 
 // БЛОК ВЕЩЕСТВЕННЫХ ЧИСЕЛ ПОЛОЖИТЕЛЬНЫХ И ОТРИЦАТЕЛЬНЫХ
 // TEST 20   (63 бита 1) <, <=, >, >=, ==, != (74 бита 1)    степень 0 и 6
     {{-1, -1, 0, 0},
      {-1, -1, 2147483647, 393216},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 21   -(63 бита 1) <, <=, >, >=, ==, != -(74 бита 1)     степень 0 и 6
     {{-1, -1, 0, -2147483648},
      {-1, -1, 2147483647, -2147090432},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 22   (63 бита 1) <, <=, >, >=, ==, != -(74 бита 1)     степень 0 и 6
     {{-1, -1, 0, 0},
      {-1, -1, 2147483647, -2147090432},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 23   -(63 бита 1) <, <=, >, >=, ==, != (74 бита 1)     степень 0 и 6
     {{-1, -1, 0, -2147483648},
      {-1, -1, 2147483647, 393216},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 24   (95 бита 1) <, <=, >, >=, ==, != (96 бита 1)     степень 16 и 28
     {{-1, -1, -2147483647, 1048576},
      {-1, -1, -1, 1835008},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 25   -(95 бита 1) <, <=, >, >=, ==, != -(96 бита 1)     степень 16 и 28
     {{-1, -1, -2147483647, -2146435072},
      {-1, -1, -1, -2145648640},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 26   (95 бита 1) <, <=, >, >=, ==, != -(96 бита 1)     степень 16 и 28
     {{-1, -1, -2147483647, 1048576},
      {-1, -1, -1, -2145648640},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 27   -(95 бита 1) <, <=, >, >=, ==, != (96 бита 1)     степень 16 и 28
     {{-1, -1, -2147483647, -2146435072},
      {-1, -1, -1, 1835008},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 28   0.00...1 <, <=, >, >=, ==, != 0.00...1     степень 16 и 28
     {{1, 0, 0, 1441792},
      {1, 0, 0, 1441792},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 29   -0.00...1 <, <=, >, >=, ==, != -0.00...1     степень 16 и 28
     {{1, 0, 0, -2146041856},
      {1, 0, 0, -2146041856},
-     s21_FALSE, s21_TRUE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE},
+     my_FALSE, my_TRUE, my_FALSE, my_TRUE, my_TRUE, my_FALSE},
 // TEST 30   0.00...1 <, <=, >, >=, ==, != -0.00...1     степень 16 и 28
     {{1, 0, 0, 1441792},
      {1, 0, 0, -2146041856},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 31   -0.00...1 <, <=, >, >=, ==, != 0.00...1     степень 16 и 28
     {{1, 0, 0, -2146041856},
      {1, 0, 0, 1441792},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 32   (каждый элемент 1) <, <=, >, >=, ==, != (каждый элемент 1)     степень 3 и 25
     {{1, 1, 1, 196608},
      {1, 1, 1, 1638400},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 33   -(каждый элемент 1) <, <=, >, >=, ==, != -(каждый элемент 1)     степень 3 и 25
     {{1, 1, 1, -2147287040},
      {1, 1, 1, -2145845248},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 // TEST 34   (каждый элемент 1) <, <=, >, >=, ==, != -(каждый элемент 1)     степень 3 и 25
     {{1, 1, 1, 196608},
      {1, 1, 1, -2145845248},
-     s21_FALSE, s21_FALSE, s21_TRUE, s21_TRUE, s21_FALSE, s21_TRUE},
+     my_FALSE, my_FALSE, my_TRUE, my_TRUE, my_FALSE, my_TRUE},
 // TEST 35   (каждый элемент 1) <, <=, >, >=, ==, != (каждый элемент 1)     степень 3 и 25
     {{1, 1, 1, -2147287040},
      {1, 1, 1, 1638400},
-     s21_TRUE, s21_TRUE, s21_FALSE, s21_FALSE, s21_FALSE, s21_TRUE},
+     my_TRUE, my_TRUE, my_FALSE, my_FALSE, my_FALSE, my_TRUE},
 };
 
 // Меньше <
 START_TEST(test_less) {
-    ck_assert_int_eq(s21_is_less(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_less(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_less);
 }
 END_TEST
 
 // Меньше или равно <=
 START_TEST(test_less_or_equal) {
-    ck_assert_int_eq(s21_is_less_or_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_less_or_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_less_or_equal);
 }
 END_TEST
 
 // Больше >
 START_TEST(test_greater) {
-    ck_assert_int_eq(s21_is_greater(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_greater(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_greater);
 }
 END_TEST
 
 // Больше или равно >=
 START_TEST(test_greater_or_equal) {
-    ck_assert_int_eq(s21_is_greater_or_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_greater_or_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_greater_or_equal);
 }
 END_TEST
 
 // Равно ==
 START_TEST(test_equal) {
-    ck_assert_int_eq(s21_is_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_equal);
 }
 END_TEST
 
 // Не равно !=
 START_TEST(test_not_equal) {
-    ck_assert_int_eq(s21_is_not_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
+    ck_assert_int_eq(my_is_not_equal(test_pack_comparison[_i].op1, test_pack_comparison[_i].op2),
                      test_pack_comparison[_i].result_not_equal);
 }
 END_TEST
 
-// s21_from_int_to_decimal
+// my_from_int_to_decimal
 
 test_struct_di test_pack_fitd[] = {
     {{10000, 0, 0, 0}, 10000, OK},
@@ -1553,14 +1553,14 @@ test_struct_di test_pack_fitd[] = {
 };
 
 START_TEST(test_fitd) {
-    s21_decimal result;
-    int code = s21_from_int_to_decimal(test_pack_fitd[_i].op2, &result);
-    ck_assert_mem_eq(&result, &test_pack_fitd[_i].op1, sizeof(s21_decimal));
+    my_decimal result;
+    int code = my_from_int_to_decimal(test_pack_fitd[_i].op2, &result);
+    ck_assert_mem_eq(&result, &test_pack_fitd[_i].op1, sizeof(my_decimal));
     ck_assert_int_eq(code, test_pack_fitd[_i].result_code);
 }
 END_TEST
 
-// s21_from_decimal_to_int
+// my_from_decimal_to_int
 
 test_struct_di test_pack_fdti[] = {
     {{10000, 0, 0, 0}, 10000, OK},
@@ -1577,14 +1577,14 @@ test_struct_di test_pack_fdti[] = {
 START_TEST(test_fdti) {
     int result = 0;
     int code = 0;
-    code = s21_from_decimal_to_int(test_pack_fdti[_i].op1, &result);
+    code = my_from_decimal_to_int(test_pack_fdti[_i].op1, &result);
     ck_assert_int_eq(result, test_pack_fdti[_i].op2);
     ck_assert_int_eq(code, test_pack_fdti[_i].result_code);
 }
 END_TEST
 
 
-// s21_from_float_to_decimal
+// my_from_float_to_decimal
 
 test_struct_df test_pack_fftd[] = {
     {{29999998, 0, 0, 589824}, 0.03F, OK},
@@ -1600,16 +1600,16 @@ test_struct_df test_pack_fftd[] = {
 };
 
 START_TEST(test_fftd) {
-    s21_decimal result;
-    int result_code = s21_from_float_to_decimal(test_pack_fftd[_i].op2, &result);
+    my_decimal result;
+    int result_code = my_from_float_to_decimal(test_pack_fftd[_i].op2, &result);
     ck_assert_int_eq(result_code, test_pack_fftd[_i].result_code);
     if (result_code == OK) {
-        ck_assert_mem_eq(&result, &test_pack_fftd[_i].op1, sizeof(s21_decimal));
+        ck_assert_mem_eq(&result, &test_pack_fftd[_i].op1, sizeof(my_decimal));
     }
 }
 END_TEST
 
-// s21_from_decimal_to_float
+// my_from_decimal_to_float
 
 test_struct_df test_pack_fdtf[] = {
     {{65125, 0, 0, 0x80030000}, -65.125, OK},
@@ -1623,12 +1623,12 @@ test_struct_df test_pack_fdtf[] = {
 
 START_TEST(test_fdtf) {
     float result = 0;
-    s21_from_decimal_to_float(test_pack_fdtf[_i].op1, &result);
+    my_from_decimal_to_float(test_pack_fdtf[_i].op1, &result);
     ck_assert_float_eq(result, test_pack_fdtf[_i].op2);
 }
 END_TEST
 
-// s21_floor
+// my_floor
 
 test_struct_dd test_pack_floor[] = {
     {{9, 0, 0, 65536}, {0, 0, 0, 0}},
@@ -1645,13 +1645,13 @@ test_struct_dd test_pack_floor[] = {
 };
 
 START_TEST(test_floor) {
-    s21_decimal result;
-    s21_floor(test_pack_floor[_i].op, &result);
-    ck_assert_mem_eq(&result, &test_pack_floor[_i].wait, sizeof(s21_decimal));
+    my_decimal result;
+    my_floor(test_pack_floor[_i].op, &result);
+    ck_assert_mem_eq(&result, &test_pack_floor[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
-// s21_round
+// my_round
 
 test_struct_dd test_pack_round[] = {
     {{9, 0, 0, 65536}, {1, 0, 0, 0}},
@@ -1670,13 +1670,13 @@ test_struct_dd test_pack_round[] = {
 };
 
 START_TEST(test_round) {
-    s21_decimal result;
-    s21_round(test_pack_round[_i].op, &result);
-    ck_assert_mem_eq(&result, &test_pack_round[_i].wait, sizeof(s21_decimal));
+    my_decimal result;
+    my_round(test_pack_round[_i].op, &result);
+    ck_assert_mem_eq(&result, &test_pack_round[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
-// s21_truncate
+// my_truncate
 
 test_struct_dd test_pack_truncate[] = {
     {{21234, 0, 0, 262144}, {2, 0, 0, 0}},
@@ -1690,13 +1690,13 @@ test_struct_dd test_pack_truncate[] = {
 };
 
 START_TEST(test_truncate) {
-    s21_decimal result;
-    s21_truncate(test_pack_truncate[_i].op, &result);
-    ck_assert_mem_eq(&result, &test_pack_truncate[_i].wait, sizeof(s21_decimal));
+    my_decimal result;
+    my_truncate(test_pack_truncate[_i].op, &result);
+    ck_assert_mem_eq(&result, &test_pack_truncate[_i].wait, sizeof(my_decimal));
 }
 END_TEST
 
-// s21_negate
+// my_negate
 
 test_struct_dd test_pack_negate[] = {
     {{9, 0, 0, 65536}, {9, 0, 0, -2147418112}},
@@ -1708,18 +1708,18 @@ test_struct_dd test_pack_negate[] = {
 };
 
 START_TEST(test_negate) {
-    s21_decimal result;
-    s21_negate(test_pack_negate[_i].op, &result);
-    ck_assert_mem_eq(&result, &test_pack_negate[_i].wait, sizeof(s21_decimal));
+    my_decimal result;
+    my_negate(test_pack_negate[_i].op, &result);
+    ck_assert_mem_eq(&result, &test_pack_negate[_i].wait, sizeof(my_decimal));
 }
 
 // main
 
 int main() {
-    Suite *s = suite_create("s21_decimal test");
+    Suite *s = suite_create("my_decimal test");
     SRunner *sr = srunner_create(s);
     srunner_set_fork_status(sr, CK_NOFORK);
-    TCase *tc = tcase_create("s21_decimal case");
+    TCase *tc = tcase_create("my_decimal case");
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 10);
 
@@ -1762,19 +1762,19 @@ int main() {
     int test_pack_size_not_equal = sizeof(test_pack_comparison) / sizeof(test_struct_ddi);
     tcase_add_loop_test(tc, test_not_equal, 0, test_pack_size_not_equal);
 
-    // s21_from_int_to_decimal
+    // my_from_int_to_decimal
     int test_pack_size_fitd = sizeof(test_pack_fitd) / sizeof(test_struct_di);
     tcase_add_loop_test(tc, test_fitd, 0, test_pack_size_fitd);
 
-    // s21_from_decimal_to_int
+    // my_from_decimal_to_int
     int test_pack_size_fdti = sizeof(test_pack_fdti) / sizeof(test_struct_di);
     tcase_add_loop_test(tc, test_fdti, 0, test_pack_size_fdti);
 
-    // s21_from_float_to_decimal
+    // my_from_float_to_decimal
     int test_pack_size_fftd = sizeof(test_pack_fftd) / sizeof(test_struct_df);
     tcase_add_loop_test(tc, test_fftd, 0, test_pack_size_fftd);
 
-    // s21_from_decimal_to_float
+    // my_from_decimal_to_float
     int test_pack_size_fdtf = sizeof(test_pack_fdtf) / sizeof(test_struct_df);
     tcase_add_loop_test(tc, test_fdtf, 0, test_pack_size_fdtf);
 

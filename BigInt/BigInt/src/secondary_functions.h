@@ -1,29 +1,29 @@
 #ifndef SRC_SECONDARY_FUNCTIONS_H_
 #define SRC_SECONDARY_FUNCTIONS_H_
 
-#define s21_TRUE 1
-#define s21_FALSE 0
+#define my_TRUE 1
+#define my_FALSE 0
 
 #include <limits.h>
-#include "s21_decimal.h"
+#include "my_decimal.h"
 
-// мини функции для работы с s21_decimal
+// мини функции для работы с my_decimal
 // возвращаем знак
-short get_sign(s21_decimal decimal);
+short get_sign(my_decimal decimal);
 // меняем знак с - на + без потери степени
-void clean_sign(s21_decimal *decimal);
+void clean_sign(my_decimal *decimal);
 // меняем знак с + на - без потери степе
-void set_sign(s21_decimal *decimal);
+void set_sign(my_decimal *decimal);
 // Возвращает степень
-short get_scale(s21_decimal decimal);
+short get_scale(my_decimal decimal);
 // устанавливаем i бит для decimal
 void set_bit_decimal(int *tmp, short i);
 
 // это можно переделать в дефайн, хотя так вроде тоже работает
-typedef enum { OK, s21_INF, s21_N_INF, s21_NAN
+typedef enum { OK, my_INF, my_N_INF, my_NAN
 } value_type_t;
 
-// структура еще большего размера чем s21_decimal,
+// структура еще большего размера чем my_decimal,
 // с отдельными полями для знака и степени для удобства работы
 typedef struct {
     int bits[7];
@@ -31,11 +31,11 @@ typedef struct {
     int scale;
 } long_decimal;
 
-// конвертирует s21_deimal в long_decimal
-long_decimal convert_in_long_dec(s21_decimal decimal);
+// конвертирует my_deimal в long_decimal
+long_decimal convert_in_long_dec(my_decimal decimal);
 
-// конвертирует long_decimal в s21_deimal
-s21_decimal convert_from_long_to_decimal(long_decimal long_dec);
+// конвертирует long_decimal в my_deimal
+my_decimal convert_from_long_to_decimal(long_decimal long_dec);
 
 // возвращаем i бит
 short get_bit(long_decimal long_dec, short i);
@@ -145,8 +145,8 @@ void bank_rounding(long_decimal value, long_decimal *result);
 // возвращает целые цифры указанного long_decimal числа
 void long_truncate(long_decimal value, long_decimal *result);
 
-void clean_dec(s21_decimal *dec);
+void clean_dec(my_decimal *dec);
 
-int found_elder_bit(s21_decimal dec);
+int found_elder_bit(my_decimal dec);
 
 #endif  // SRC_SECONDARY_FUNCTIONS_H_

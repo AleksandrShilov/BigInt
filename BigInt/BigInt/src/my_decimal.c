@@ -1,36 +1,36 @@
-#include "s21_decimal.h"
+#include "my_decimal.h"
 #include "secondary_functions.h"
 // ОПЕРАТОРЫ СРАВНЕНИЯ
 // логическое равно ==
-int s21_is_equal(s21_decimal decimal1, s21_decimal decimal2) {
+int my_is_equal(my_decimal decimal1, my_decimal decimal2) {
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
     return equal_long_decimal(long_dec1, long_dec2);
 }
 
 // логическое не равно !=
-int s21_is_not_equal(s21_decimal decimal1, s21_decimal decimal2) {
+int my_is_not_equal(my_decimal decimal1, my_decimal decimal2) {
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
-    short result = s21_FALSE;
+    short result = my_FALSE;
     normalization(&long_dec1, &long_dec2);
     if (long_dec1.sign == long_dec2.sign) {
         for (short i = 191; i >= 0; i--) {
             if ((get_bit(long_dec1, i)) != (get_bit(long_dec2, i))) {
-                result = s21_TRUE;
+                result = my_TRUE;
                 break;
             }
         }
     } else {
         if (!(equal_nul(long_dec1, long_dec2))) {
-            result = s21_TRUE;
+            result = my_TRUE;
         }
     }
     return result;
 }
 
 // логическое больше >
-int s21_is_greater(s21_decimal decimal1, s21_decimal decimal2) {
+int my_is_greater(my_decimal decimal1, my_decimal decimal2) {
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
     int err = 0;
@@ -41,14 +41,14 @@ int s21_is_greater(s21_decimal decimal1, s21_decimal decimal2) {
 }
 
 // логическое больше или равно >=
-int s21_is_greater_or_equal(s21_decimal decimal1, s21_decimal decimal2) {
+int my_is_greater_or_equal(my_decimal decimal1, my_decimal decimal2) {
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
     return greater_or_equal_long_decimal(long_dec1, long_dec2);
 }
 
 // логическое меньше <
-int s21_is_less(s21_decimal decimal1, s21_decimal decimal2) {
+int my_is_less(my_decimal decimal1, my_decimal decimal2) {
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
     int err = 0;
@@ -59,19 +59,19 @@ int s21_is_less(s21_decimal decimal1, s21_decimal decimal2) {
 }
 
 // логическое меньше или равно <=
-int s21_is_less_or_equal(s21_decimal decimal1, s21_decimal decimal2) {
-    short result = s21_FALSE;
-    short greater = s21_is_less(decimal1, decimal2);
-    short equal = s21_is_equal(decimal1, decimal2);
+int my_is_less_or_equal(my_decimal decimal1, my_decimal decimal2) {
+    short result = my_FALSE;
+    short greater = my_is_less(decimal1, decimal2);
+    short equal = my_is_equal(decimal1, decimal2);
     if (greater || equal)
-        result = s21_TRUE;
+        result = my_TRUE;
     return result;
 }
 
 // АРИФМЕТИКА
 // полное вычетание
-int s21_sub(s21_decimal decimal1, s21_decimal decimal2, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_sub(my_decimal decimal1, my_decimal decimal2, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     long_decimal long_dec1 = convert_in_long_dec(decimal1);
     long_decimal long_dec2 = convert_in_long_dec(decimal2);
     long_decimal long_dec3 = convert_in_long_dec(*result);
@@ -88,8 +88,8 @@ int s21_sub(s21_decimal decimal1, s21_decimal decimal2, s21_decimal *result) {
 }
 
 // полное сложение
-int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_add(my_decimal value_1, my_decimal value_2, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     short err = OK;
     long_decimal long_dec1 = convert_in_long_dec(value_1);
     long_decimal long_dec2 = convert_in_long_dec(value_2);
@@ -119,8 +119,8 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 }
 
 // полное умножение
-int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_mul(my_decimal value_1, my_decimal value_2, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     long_decimal long_dec1 = convert_in_long_dec(value_1);
     long_decimal long_dec2 = convert_in_long_dec(value_2);
     long_decimal long_dec3 = convert_in_long_dec(*result);
@@ -138,8 +138,8 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 }
 
 // остаток от деления
-int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_mod(my_decimal value_1, my_decimal value_2, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     long_decimal long_dec1_integer = convert_in_long_dec(value_1);
     long_decimal long_dec_res = convert_in_long_dec(*result);
     long_decimal long_dec1 = convert_in_long_dec(value_1);
@@ -175,15 +175,15 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 }
 
 // деление
-int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_div(my_decimal value_1, my_decimal value_2, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     long_decimal long_dec_res = convert_in_long_dec(*result);
     long_decimal long_dec1 = convert_in_long_dec(value_1);
     long_decimal long_dec2 = convert_in_long_dec(value_2);
-    s21_decimal nul = {{0, 0, 0, 0}};
+    my_decimal nul = {{0, 0, 0, 0}};
     short err = OK;
     clean_struct_long_dec(&long_dec_res);
-    if (s21_is_not_equal(value_2, nul)) {
+    if (my_is_not_equal(value_2, nul)) {
         div_int(long_dec1, long_dec2, &long_dec_res);
         bank_rounding(long_dec_res, &long_dec_res);
         set_sign_result(long_dec1, long_dec2, &long_dec_res);
@@ -192,7 +192,7 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
             clean_struct_long_dec(&long_dec_res);
         }
     } else {
-        err = s21_NAN;
+        err = my_NAN;
         if (equal_nul(long_dec1, long_dec2) && long_dec1.scale && long_dec2.scale) {
             long_dec_res.scale = 6;
         }
@@ -203,13 +203,13 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 
 // ДРУГИЕ ФУНКЦИИ
 // Округляет указанное Decimal число до ближайшего целого числа в сторону отрицательной бесконечности.
-int s21_floor(s21_decimal value, s21_decimal *result) {
-    s21_decimal one = {{1, 0, 0, 0}};
-    s21_truncate(value, result);
+int my_floor(my_decimal value, my_decimal *result) {
+    my_decimal one = {{1, 0, 0, 0}};
+    my_truncate(value, result);
     if (get_scale(value)) {
         if (get_sign(value)) {
             set_sign(result);
-            s21_sub(*result, one, result);
+            my_sub(*result, one, result);
         }
     } else {
         *result = value;
@@ -218,11 +218,11 @@ int s21_floor(s21_decimal value, s21_decimal *result) {
 }
 
 // Округляет Decimal до ближайшего целого числа
-int s21_round(s21_decimal value, s21_decimal *result) {
+int my_round(my_decimal value, my_decimal *result) {
     long_decimal long_res = convert_in_long_dec(value);
     long_decimal ten = {{10, 0, 0, 0, 0, 0, 0}, 0, 0};
-    s21_decimal one = {{1, 0, 0, 0}};
-    s21_truncate(value, result);
+    my_decimal one = {{1, 0, 0, 0}};
+    my_truncate(value, result);
     if (long_res.scale) {
         while (long_res.scale > 1) {
             calculat_integer(long_res, ten, &long_res, 0);
@@ -232,9 +232,9 @@ int s21_round(s21_decimal value, s21_decimal *result) {
     if (get_scale(value)) {
         if (long_decimal_mod_10(long_res) >= 5) {
             if (get_sign(value)) {
-                s21_sub(*result, one, result);
+                my_sub(*result, one, result);
             } else {
-                s21_add(*result, one, result);
+                my_add(*result, one, result);
             }
         }
     } else {
@@ -247,8 +247,8 @@ int s21_round(s21_decimal value, s21_decimal *result) {
 }
 
 //  Возвращает целые цифры указанного decimal числа
-int s21_truncate(s21_decimal value, s21_decimal *result) {
-    *result = (s21_decimal){{0, 0, 0, 0}};
+int my_truncate(my_decimal value, my_decimal *result) {
+    *result = (my_decimal){{0, 0, 0, 0}};
     long_decimal long_dec_res = convert_in_long_dec(*result);
     long_decimal long_dec1 = convert_in_long_dec(value);
     clean_struct_long_dec(&long_dec_res);
@@ -258,7 +258,7 @@ int s21_truncate(s21_decimal value, s21_decimal *result) {
 }
 
 //  Возвращает результат умножения указанного Decimal на -1.
-int s21_negate(s21_decimal value, s21_decimal *result) {
+int my_negate(my_decimal value, my_decimal *result) {
     short err = 0;
     *result = value;
     if (get_sign(value)) {
@@ -271,7 +271,7 @@ int s21_negate(s21_decimal value, s21_decimal *result) {
 
 // ПРЕОБРАЗОВАТЕЛИ
 /* из float в decimal */
-int s21_from_float_to_decimal(float src, s21_decimal *dst) {
+int my_from_float_to_decimal(float src, my_decimal *dst) {
     clean_dec(dst);
     int ret = 0;
     if (src != src || src == INFINITY || src == -INFINITY) {
@@ -320,7 +320,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
 }
 
 /* из decimal в float */
-int s21_from_decimal_to_float(s21_decimal src, float *dst) {
+int my_from_decimal_to_float(my_decimal src, float *dst) {
     int ret = 0;
     int bit = 0;
     if (dst) {
@@ -348,7 +348,7 @@ int s21_from_decimal_to_float(s21_decimal src, float *dst) {
     return ret;
 }
 
-int s21_from_int_to_decimal(int src, s21_decimal *dst) {
+int my_from_int_to_decimal(int src, my_decimal *dst) {
     int err = OK;
     clean_dec(dst);
     if (src >= 0) {
@@ -364,11 +364,11 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst) {
     return err;
 }
 
-int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+int my_from_decimal_to_int(my_decimal src, int *dst) {
     int err = OK;
-    s21_decimal value;
+    my_decimal value;
     if (get_scale(src)) {
-        s21_truncate(src, &value);
+        my_truncate(src, &value);
     } else {
         value = src;
     }

@@ -1,21 +1,21 @@
 #include "secondary_functions.h"
 // возвращаем знак
-short get_sign(s21_decimal decimal) {
+short get_sign(my_decimal decimal) {
     return (decimal.bits[3] & 2147483648) >> 31;
 }
 
 // меняем знак с - на + без потери степени
-void clean_sign(s21_decimal *decimal) {
+void clean_sign(my_decimal *decimal) {
     decimal->bits[3] = decimal->bits[3] & 2147483647;  // 4294967295 для U
 }
 
 // меняем знак с + на - без потери степени
-void set_sign(s21_decimal *decimal) {
+void set_sign(my_decimal *decimal) {
     decimal->bits[3] = decimal->bits[3] | 2147483648;
 }
 
 // возвращает степень
-short get_scale(s21_decimal decimal) {
+short get_scale(my_decimal decimal) {
     return (decimal.bits[3] & 16711680) >> 16;
 }
 
@@ -25,8 +25,8 @@ void set_bit_decimal(int *tmp, short i) {
     *tmp = (*tmp | bit);
 }
 
-// конвертирует s21_deimal в long_decimal
-long_decimal convert_in_long_dec(s21_decimal decimal) {
+// конвертирует my_deimal в long_decimal
+long_decimal convert_in_long_dec(my_decimal decimal) {
     long_decimal res = {{
         decimal.bits[0],
         decimal.bits[1],
@@ -41,10 +41,10 @@ long_decimal convert_in_long_dec(s21_decimal decimal) {
     return res;
 }
 
-// конвертирует long_decimal в s21_deimal
-s21_decimal convert_from_long_to_decimal(long_decimal long_dec) {
+// конвертирует long_decimal в my_deimal
+my_decimal convert_from_long_to_decimal(long_decimal long_dec) {
     int scale = long_dec.scale << 16;
-    s21_decimal res = {{
+    my_decimal res = {{
         long_dec.bits[0],
         long_dec.bits[1],
         long_dec.bits[2],
@@ -228,18 +228,18 @@ int equal_nul(long_decimal long_dec1, long_decimal long_dec2) {
 
 // логическое равно == для long_decimal
 int equal_long_decimal(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_TRUE;
+    short result = my_TRUE;
     normalization(&long_dec1, &long_dec2);
     if (long_dec1.sign == long_dec2.sign) {
         for (short i = 191; i >= 0; i--) {
             if ((get_bit(long_dec1, i)) != (get_bit(long_dec2, i))) {
-                result = s21_FALSE;
+                result = my_FALSE;
                 break;
             }
         }
     } else {
         if (!(equal_nul(long_dec1, long_dec2))) {
-            result = s21_FALSE;
+            result = my_FALSE;
         }
     }
     return result;
@@ -247,7 +247,7 @@ int equal_long_decimal(long_decimal long_dec1, long_decimal long_dec2) {
 
 // логическое больше > для long_dec
 short greater_for_long_dec(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_FALSE;
+    short result = my_FALSE;
     normalization(&long_dec1, &long_dec2);
     if (long_dec1.sign && long_dec2.sign) {
         for (short i = 191; i >= 0; i--) {
@@ -256,7 +256,7 @@ short greater_for_long_dec(long_decimal long_dec1, long_decimal long_dec2) {
             if (bit1 > bit2) {
                 break;
             } else if (bit1 < bit2) {
-                result = s21_TRUE;
+                result = my_TRUE;
                 break;
             }
         }
@@ -265,38 +265,38 @@ short greater_for_long_dec(long_decimal long_dec1, long_decimal long_dec2) {
             short bit1 = get_bit(long_dec1, i);
             short bit2 = get_bit(long_dec2, i);
             if (bit1 > bit2) {
-                result = s21_TRUE;
+                result = my_TRUE;
                 break;
             } else if (bit1 < bit2) {
                 break;
             }
         }
     } else if (long_dec1.sign < long_dec2.sign) {
-        result = s21_TRUE;
+        result = my_TRUE;
     }
     return result;
 }
 
 // логическое больше или равно >=
 int greater_or_equal_long_decimal(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_FALSE;
+    short result = my_FALSE;
     short greater = greater_for_long_dec(long_dec1, long_dec2);
     short equal = equal_long_decimal(long_dec1, long_dec2);
     if (greater || equal)
-        result = s21_TRUE;
+        result = my_TRUE;
     return result;
 }
 
 // логическое меньше < для long_decimal
 short less_for_long_dec(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_FALSE;
+    short result = my_FALSE;
     normalization(&long_dec1, &long_dec2);
     if (long_dec1.sign && long_dec2.sign) {
         for (short i = 191; i >= 0; i--) {
             short bit1 = get_bit(long_dec1, i);
             short bit2 = get_bit(long_dec2, i);
             if (bit1 > bit2) {
-                result = s21_TRUE;
+                result = my_TRUE;
                 break;
             } else if (bit1 < bit2) {
                 break;
@@ -309,24 +309,24 @@ short less_for_long_dec(long_decimal long_dec1, long_decimal long_dec2) {
             if (bit1 > bit2) {
                 break;
             } else if (bit1 < bit2) {
-                result = s21_TRUE;
+                result = my_TRUE;
                 break;
             }
         }
     } else if (long_dec1.sign > long_dec2.sign && !equal_nul(long_dec1, long_dec2)) {
-        result = s21_TRUE;
+        result = my_TRUE;
     }
     return result;
 }
 
 // сравнивает значение двух long_decimal
 int compare_digit_long_decimal(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_FALSE;
+    short result = my_FALSE;
     for (short i = 223; i >= 0; i--) {
         short bit1 = get_bit(long_dec1, i);
         short bit2 = get_bit(long_dec2, i);
         if (bit1 > bit2) {
-            result = s21_TRUE;
+            result = my_TRUE;
             break;
         } else if (bit1 < bit2) {
             break;
@@ -337,15 +337,15 @@ int compare_digit_long_decimal(long_decimal long_dec1, long_decimal long_dec2) {
 
 // сравнивает значение двух long_decimal
 int compare_digit_long_decimal_great_or_equal(long_decimal long_dec1, long_decimal long_dec2) {
-    short result = s21_TRUE;
+    short result = my_TRUE;
     for (short i = 223; i >= 0; i--) {
         short bit1 = get_bit(long_dec1, i);
         short bit2 = get_bit(long_dec2, i);
         if (bit1 > bit2) {
-            result = s21_TRUE;
+            result = my_TRUE;
             break;
         } else if (bit1 < bit2) {
-            result = s21_FALSE;
+            result = my_FALSE;
             break;
         }
     }
@@ -372,15 +372,15 @@ short error(long_decimal long_dec) {
     long_decimal nul = {{0, 0, 0, 0, 0, 0, 0}, 0, 0};
     short err = OK;
     if (greater_for_long_dec(long_dec, max_decimal_for_inf)) {
-        err = s21_INF;
+        err = my_INF;
     } else if (less_for_long_dec(long_dec, min_decimal_for_n_inf)) {
-        err = s21_N_INF;
+        err = my_N_INF;
     } else if ((less_for_long_dec(long_dec, nan)) && greater_for_long_dec(long_dec, nul)) {
-        err = s21_NAN;
+        err = my_NAN;
     } else if ((greater_for_long_dec(long_dec, n_nan)) && (less_for_long_dec(long_dec, nul))) {
-        err = s21_NAN;
+        err = my_NAN;
     } else if (long_dec.scale > 28) {
-        err = s21_NAN;
+        err = my_NAN;
     }
     return err;
 }
@@ -436,13 +436,13 @@ void sub_simple(long_decimal long_dec1, long_decimal long_dec2, long_decimal *lo
 // вычитание для long_decimal
 void sub_long_decimal(long_decimal long_dec1, long_decimal long_dec2, long_decimal *long_dec3) {
     clean_struct_long_dec(long_dec3);
-    s21_decimal decimal1 = convert_from_long_to_decimal(long_dec1);
-    s21_decimal decimal2 = convert_from_long_to_decimal(long_dec2);
+    my_decimal decimal1 = convert_from_long_to_decimal(long_dec1);
+    my_decimal decimal2 = convert_from_long_to_decimal(long_dec2);
     long_dec3->scale = normalization(&long_dec1, &long_dec2);
-    if (s21_is_less(decimal1, decimal2)) {
+    if (my_is_less(decimal1, decimal2)) {
         if (!long_dec1.sign && !long_dec2.sign) {
             sub_simple(long_dec1, long_dec2, long_dec3);
-            s21_decimal one = {{1, 0, 0, 0}};
+            my_decimal one = {{1, 0, 0, 0}};
             long_decimal long_dec4 = convert_in_long_dec(one);
             sub_simple(*long_dec3, long_dec4, long_dec3);
             inversion(long_dec3);
@@ -568,7 +568,7 @@ long_decimal *result, short err) {
     long_decimal long_nul = {{0, 0, 0, 0, 0, 0, 0}, 0, 0};
     long_decimal long_res = {{0, 0, 0, 0, 0, 0, 0}, 0, 0};
     long_decimal long_dec1_copy = long_dec1;
-    s21_decimal nul = {{0, 0, 0, 0}};
+    my_decimal nul = {{0, 0, 0, 0}};
     clean_struct_long_dec(result);
     if (compare_digit_long_decimal(long_dec1, long_dec2) && !equal_long_decimal(long_dec2, long_nul)) {
         calculat_integer(long_dec1, long_dec2, result, 1);
@@ -580,7 +580,7 @@ long_decimal *result, short err) {
         *result = long_dec1_copy;
     } else {
         *result = long_res;
-        err = s21_NAN;
+        err = my_NAN;
     }
     set_sign_result(long_dec1, long_dec2, result);
     return err;
@@ -774,13 +774,13 @@ void long_truncate(long_decimal value, long_decimal *result) {
     result->sign = value.sign;
 }
 
-void clean_dec(s21_decimal *dec) {
+void clean_dec(my_decimal *dec) {
     for (int i = 0; i < 4; i++) {
         dec->bits[i] = 0;
     }
 }
 
-int found_elder_bit(s21_decimal dec) {
+int found_elder_bit(my_decimal dec) {
     int bit = 0;
     long_decimal tmp = convert_in_long_dec(dec);
     for (int i = 95; i >= 0; i--) {
